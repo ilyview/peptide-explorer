@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import type { Peptide } from '../data/peptides'
 import { Molecule, shownResidues } from './Molecule'
@@ -14,6 +14,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 }
 
 export function Detail({ peptide: p, onClose }: { peptide: Peptide; onClose: () => void }) {
+  const [tab, setTab] = useState<'info' | 'anecdotes'>('info')
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && onClose()
     window.addEventListener('keydown', onKey)
@@ -79,6 +80,41 @@ export function Detail({ peptide: p, onClose }: { peptide: Peptide; onClose: () 
             <p className="mt-2 text-sm text-neutral-300">{p.evidenceNote}</p>
           </header>
 
+
+          {p.anecdotes?.length ? (
+            <div className="flex gap-2" role="tablist">
+              {(['info', 'anecdotes'] as const).map((t) => (
+                <button
+                  key={t}
+                  role="tab"
+                  aria-selected={tab === t}
+                  onClick={() => setTab(t)}
+                  className={`rounded-full px-4 py-1.5 text-sm ${tab === t ? 'bg-white font-medium text-black' : 'bg-white/10 text-neutral-300 hover:bg-white/15'}`}
+                >
+                  {t === 'info' ? 'Overview' : `Anecdotes (${p.anecdotes!.length})`}
+                </button>
+              ))}
+            </div>
+          ) : null}
+
+          {tab === 'anecdotes' && p.anecdotes ? (
+            <section className="space-y-3">
+              <p className="rounded-xl border border-white/20 p-3 text-sm text-neutral-300">
+                Personal reports from forum posts, paraphrased. They are not evidence: nobody checked them, people often take
+                several things at once, and those who had a good time are more likely to post.
+              </p>
+              {p.anecdotes.map((a) => (
+                <article key={a.url} className="rounded-xl border border-white/10 bg-white/5 p-4">
+                  <p className="text-neutral-200">{a.summary}</p>
+                  <a href={a.url} target="_blank" rel="noreferrer" className="mt-2 inline-block text-sm text-white underline decoration-white/40 underline-offset-2">
+                    {a.thread} (looksmax.org)
+                  </a>
+                </article>
+              ))}
+            </section>
+          ) : (
+          <>
+
           <Section title="What it is">{p.whatItIs}</Section>
           <Section title="What it does">{p.whatItDoes}</Section>
           <Section title="How it works (explain like I'm 5)">{p.howItWorks}</Section>
@@ -127,6 +163,9 @@ export function Detail({ peptide: p, onClose }: { peptide: Peptide; onClose: () 
               <p className="font-medium text-neutral-100">No body simulator for this one</p>
               <p className="mt-1">{p.noSimReason}</p>
             </div>
+          )}
+
+          </>
           )}
 
           <Disclaimer />
