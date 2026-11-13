@@ -1,9 +1,13 @@
 import { EVIDENCE_LABEL, type EvidenceLevel } from '../data/peptides'
 
+// Black and white: strength of evidence is shown by how "solid" the tag is.
 const EVIDENCE_STYLE: Record<EvidenceLevel, string> = {
-  approved: 'bg-emerald-400/15 text-emerald-300 ring-emerald-400/30',
-  limited: 'bg-amber-400/15 text-amber-300 ring-amber-400/30',
-  animal: 'bg-rose-400/15 text-rose-300 ring-rose-400/30',
+  approved: 'bg-white text-black ring-white',
+  approvedElsewhere: 'bg-neutral-300 text-black ring-neutral-300',
+  trial: 'bg-white/15 text-white ring-white/60',
+  limited: 'bg-transparent text-neutral-300 ring-neutral-500',
+  animal: 'bg-transparent text-neutral-400 ring-neutral-600',
+  none: 'bg-transparent text-neutral-500 ring-neutral-700',
 }
 
 export function EvidenceTag({ level }: { level: EvidenceLevel }) {
@@ -17,7 +21,7 @@ export function EvidenceTag({ level }: { level: EvidenceLevel }) {
 
 export function Disclaimer({ className = '' }: { className?: string }) {
   return (
-    <p role="note" className={`rounded-xl border border-amber-300/25 bg-amber-300/10 px-4 py-2.5 text-sm text-amber-100 ${className}`}>
+    <p role="note" className={`rounded-xl border border-white/30 bg-black px-4 py-2.5 text-sm text-neutral-200 ${className}`}>
       <strong className="font-semibold">Educational only, not medical advice.</strong> This site does not recommend any
       peptide or dose. Talk to a doctor before taking anything.
     </p>

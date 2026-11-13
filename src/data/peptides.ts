@@ -3,13 +3,28 @@
 // IMPORTANT: the `sim` block is a simple, illustrative model built from the
 // headline results of the cited trials. It is NOT a medical prediction.
 
-export type EvidenceLevel = 'approved' | 'limited' | 'animal'
+export type EvidenceLevel = 'approved' | 'approvedElsewhere' | 'trial' | 'limited' | 'animal' | 'none'
 
-export type Category = 'Weight & metabolism' | 'Growth hormone' | 'Healing & recovery'
+export type Category =
+  | 'Weight & metabolism'
+  | 'Growth hormone'
+  | 'Healing & recovery'
+  | 'Skin, hair & tanning'
+  | 'Sex & hormones'
+  | 'Brain & sleep'
+  | 'Longevity & immune'
+  | 'Performance'
 
 export interface Source {
   label: string
   url: string
+}
+
+/** A paraphrased forum report. Never invent these: each must link to a real thread. */
+export interface Anecdote {
+  thread: string
+  url: string
+  summary: string
 }
 
 export interface BodyStats {
@@ -56,12 +71,18 @@ export interface Peptide {
   durationOfEffect: string
   /** Number of amino acids. Drives the stylized 3D chain. */
   residues: number
+  /** Shown instead of the exact count when it is a mixture, approximate, or not a peptide. */
+  residuesNote?: string
+  /** Red "not proven" banner text for claims that go beyond the evidence. */
+  claimsWarning?: string
+  anecdotes?: Anecdote[]
   color: string
   sources: Source[]
   /** Missing = no simulator (not enough human data to base one on). */
   sim?: SimConfig
   noSimReason?: string
 }
+
 
 // ---------- helpers for the illustrative effect curves ----------
 
@@ -102,6 +123,8 @@ const SEMA_STEPS = [0.25, 0.5, 1, 1.7, 2.4]
 const TIRZ_STEPS = [2.5, 5, 7.5, 10, 12.5, 15]
 const GH_STEPS = [0.5, 1, 1.5, 2, 2.5, 3]
 const TESA_STEPS = [1, 2]
+const RETA_STEPS = [4, 9, 12]
+const CAGRI_STEPS = [2.4]
 
 export const PEPTIDES: Peptide[] = [
   {
@@ -323,6 +346,14 @@ export const PEPTIDES: Peptide[] = [
     ],
     noSimReason:
       'There are no good human studies measuring body changes with ipamorelin, so any simulation would be made up. We would rather show nothing than guess.',
+    anecdotes: [
+      {
+        thread: 'My Experience w/ Looksmaxxing',
+        url: 'https://looksmax.org/threads/my-experience-w-looksmaxxing.1559297/',
+        summary:
+          'The poster used ipamorelin together with CJC-1295 twice a day and reported more energy and libido after about a week. They were taking several other things at the same time, so the effect cannot be pinned on ipamorelin.',
+      },
+    ],
   },
   {
     id: 'bpc-157',
@@ -355,15 +386,134 @@ export const PEPTIDES: Peptide[] = [
     ],
     noSimReason:
       'This peptide has only been studied in animals. There is no human data to build a body simulation from, and no established human dose.',
+    anecdotes: [
+      {
+        thread: 'My Experience With Bpc-157 and TB-500',
+        url: 'https://looksmax.org/threads/my-experience-with-bpc-157-and-tb-500.2435342/',
+        summary:
+          'The poster was recovering from surgery on a broken kneecap and felt the knee healed faster than expected while using BPC-157 with TB-500 and GHK-Cu. A reply put skin changes down to microneedling rather than the peptides.',
+      },
+      {
+        thread: 'BPC 157 is AMAZING',
+        url: 'https://looksmax.org/threads/bpc-157-is-amazing.928841/',
+        summary:
+          'A long-time member says old wounds that would not heal had closed after about a week. Another reply says it cleared their tendonitis in about three weeks.',
+      },
+    ],
+  },
+  {
+    id: 'retatrutide',
+    name: 'Retatrutide',
+    category: 'Weight & metabolism',
+    evidence: 'trial',
+    evidenceNote:
+      'Finished large phase 3 trials in 2026 with strong results, but not approved yet. Anything sold online now is unregulated "research" product.',
+    summary: 'A weekly shot that copies three hormones at once. The strongest weight-loss drug tested so far.',
+    whatItIs:
+      'A 39-amino-acid peptide from Eli Lilly that acts like three hormones together: GLP-1, GIP and glucagon. People online call it "GLP-3" or "reta".',
+    whatItDoes:
+      'Cuts appetite like semaglutide and tirzepatide, and the glucagon part also makes the body burn a bit more energy. In the TRIUMPH-1 trial, people lost about 25% of their body weight in 80 weeks on the top dose.',
+    howItWorks:
+      'Tirzepatide rings two "I\'m full" doorbells. Retatrutide rings those two plus a third one that tells the body to turn up its furnace and burn stored fuel.',
+    sideEffects: {
+      common: ['Feeling sick (nausea)', 'Diarrhea or constipation', 'Throwing up', 'Faster heartbeat', 'Less appetite'],
+      rare: [
+        'More people stopped because of side effects on the top dose than on placebo',
+        'Same class worries as GLP-1 drugs: pancreas and gallbladder problems',
+        'Unregulated online products may be fake, impure or the wrong strength',
+      ],
+    },
+    durationOfEffect: 'Half-life is about 6 days, so it is taken once a week. In trials the dose was raised step by step over several months.',
+    residues: 39,
+    color: '#38bdf8',
+    sources: [
+      { label: 'Jastreboff et al. 2023, NEJM (phase 2 trial)', url: 'https://doi.org/10.1056/NEJMoa2301972' },
+      { label: 'TRIUMPH-1 phase 3 results (AJMC, May 2026)', url: 'https://ajmc.com/view/retatrutide-achieves-up-to-30-3-average-weight-loss-in-phase-3-triumph-1-trial' },
+    ],
+    sim: {
+      doseUnit: 'mg',
+      dosePer: 'week',
+      doseSteps: RETA_STEPS,
+      maxWeeks: 80,
+      studiedIn:
+        'TRIUMPH-1: about 2,300 adults with obesity, without diabetes. Average loss at 80 weeks was about 17.6% (4 mg), 23.7% (9 mg) and 25% (12 mg), versus 3.9% on placebo. These are company-reported topline results.',
+      notes: [
+        'Not approved yet. In the trial the dose was raised slowly; this model ignores that.',
+        'How much of the loss is fat versus lean tissue is a guess here, borrowed from similar drugs.',
+      ],
+      effectCurve: weightLossCurve({ steps: RETA_STEPS, potency: [0.7, 0.95, 1], maxLossPct: 25.5, tau: 26, fatShare: 0.72 }),
+    },
+    anecdotes: [
+      {
+        thread: 'BLUEBANDZ ultimate guide to weight loss',
+        url: 'https://looksmax.org/threads/bluebandz-ultimate-guide-to-weight-loss-botb-worthy.2155602/',
+        summary:
+          'A guide post rather than a personal log. The author says it stops snacking and that people seem to lose less muscle on it, and repeatedly says it should only be used with a doctor.',
+      },
+    ],
+  },
+  {
+    id: 'cagrilintide',
+    name: 'Cagrilintide',
+    alsoKnownAs: 'Part of CagriSema',
+    category: 'Weight & metabolism',
+    evidence: 'trial',
+    evidenceNote: 'In phase 3 trials (Novo Nordisk). Not approved on its own or in the CagriSema combination yet.',
+    summary: 'A weekly shot that copies amylin, a "you\'ve eaten enough" hormone from the pancreas.',
+    whatItIs:
+      'A long-acting copy of amylin, a 37-amino-acid hormone your pancreas releases together with insulin after meals.',
+    whatItDoes:
+      'Makes meals feel more filling so people eat less. On its own it gave about 12% weight loss in a big trial. Combined with semaglutide (CagriSema) it gave about 23%.',
+    howItWorks:
+      'Insulin has a little sibling called amylin that tells the brain "that was a proper meal, you can stop now". Cagrilintide is a version of that sibling that keeps talking for a whole week.',
+    sideEffects: {
+      common: ['Feeling sick (nausea)', 'Constipation or diarrhea', 'Throwing up', 'Injection-site reactions'],
+      rare: ['Long-term safety still being studied', 'Unregulated online products may be fake or impure'],
+    },
+    durationOfEffect: 'Half-life is about a week, so it is taken once a week.',
+    residues: 37,
+    color: '#2dd4bf',
+    sources: [
+      { label: 'REDEFINE 1 cagrilintide results (Pharmacy Times, 2025)', url: 'https://www.pharmacytimes.com/view/cagrilintide-demonstrates-promising-results-as-monotherapy-for-obesity-management' },
+      { label: 'Cagrilintide research (PubMed search)', url: 'https://pubmed.ncbi.nlm.nih.gov/?term=cagrilintide' },
+    ],
+    sim: {
+      doseUnit: 'mg',
+      dosePer: 'week',
+      doseSteps: CAGRI_STEPS,
+      maxWeeks: 68,
+      studiedIn:
+        'REDEFINE 1: adults with obesity or overweight. People who stuck with 2.4 mg lost about 11.8% of body weight at 68 weeks, versus 2.3% on placebo.',
+      notes: ['Only the 2.4 mg dose was tested on its own in phase 3, so the dose cannot be changed here.', 'Fat versus lean split is a guess borrowed from similar drugs.'],
+      effectCurve: weightLossCurve({ steps: CAGRI_STEPS, potency: [1], maxLossPct: 12.3, tau: 22, fatShare: 0.7 }),
+    },
   },
 ]
 
-export const CATEGORIES: Category[] = ['Weight & metabolism', 'Growth hormone', 'Healing & recovery']
+
+export const CATEGORIES: Category[] = [
+  'Weight & metabolism',
+  'Growth hormone',
+  'Healing & recovery',
+  'Skin, hair & tanning',
+  'Sex & hormones',
+  'Brain & sleep',
+  'Longevity & immune',
+  'Performance',
+]
 
 export const EVIDENCE_LABEL: Record<EvidenceLevel, string> = {
   approved: 'Approved medicine',
+  approvedElsewhere: 'Approved in some countries',
+  trial: 'In late-stage trials',
   limited: 'Limited human data',
   animal: 'Animal studies only',
+  none: 'No published studies',
 }
+
+/** Levels where the claimed effects have not been shown in proper human trials. */
+export const UNPROVEN: EvidenceLevel[] = ['limited', 'animal', 'none']
+
+export const isUnproven = (p: Peptide) => UNPROVEN.includes(p.evidence) || !!p.claimsWarning
 
 export const getPeptide = (id: string) => PEPTIDES.find((p) => p.id === id)

@@ -32,7 +32,7 @@ function Slider(props: {
   return (
     <label className="block">
       <span className="mb-1 flex items-baseline justify-between text-sm">
-        <span className="text-slate-300">{props.label}</span>
+        <span className="text-neutral-300">{props.label}</span>
         <span className="font-semibold tabular-nums text-white">{props.display}</span>
       </span>
       <input
@@ -42,7 +42,7 @@ function Slider(props: {
         step={props.step ?? 1}
         value={props.value}
         onChange={(e) => props.onChange(Number(e.target.value))}
-        className="w-full accent-cyan-300"
+        className="w-full accent-white"
       />
     </label>
   )
@@ -52,10 +52,10 @@ function Row({ label, start, after, unit, digits = 1 }: { label: string; start: 
   const delta = after - start
   return (
     <tr className="border-t border-white/10">
-      <th scope="row" className="py-2 pr-2 text-left font-normal text-slate-300">{label}</th>
-      <td className="py-2 pr-2 text-right tabular-nums text-slate-400">{fmt(start, digits)}</td>
+      <th scope="row" className="py-2 pr-2 text-left font-normal text-neutral-300">{label}</th>
+      <td className="py-2 pr-2 text-right tabular-nums text-neutral-400">{fmt(start, digits)}</td>
       <td className="py-2 pr-2 text-right font-semibold tabular-nums text-white">{fmt(after, digits)} {unit}</td>
-      <td className={`py-2 text-right tabular-nums ${delta < -0.05 ? 'text-emerald-300' : delta > 0.05 ? 'text-sky-300' : 'text-slate-500'}`}>
+      <td className={`py-2 text-right tabular-nums ${delta < -0.05 ? 'text-white' : delta > 0.05 ? 'text-neutral-300' : 'text-neutral-500'}`}>
         {signed(delta, digits)}
       </td>
     </tr>
@@ -79,11 +79,11 @@ function Curve({ stats, sim, dose, weeks, color }: { stats: BodyStats; sim: SimC
   const path = series.map((v, w) => `${w ? 'L' : 'M'}${x(w).toFixed(1)},${y(v).toFixed(1)}`).join(' ')
   return (
     <figure>
-      <figcaption className="mb-1 flex justify-between text-xs text-slate-400">
+      <figcaption className="mb-1 flex justify-between text-xs text-neutral-400">
         <span>Estimated weight over time</span>
         <span>week 0 to {sim.maxWeeks}</span>
       </figcaption>
-      <svg viewBox={`0 0 ${W} ${H}`} className="w-full rounded-lg bg-slate-950/60" role="img" aria-label={`Estimated weight goes from ${fmt(series[0])} to ${fmt(series[weeks])} kg by week ${weeks}`}>
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full rounded-lg bg-neutral-950/60" role="img" aria-label={`Estimated weight goes from ${fmt(series[0])} to ${fmt(series[weeks])} kg by week ${weeks}`}>
         <path d={path} fill="none" stroke={color} strokeWidth="2" strokeOpacity="0.35" />
         <path d={series.slice(0, weeks + 1).map((v, w) => `${w ? 'L' : 'M'}${x(w).toFixed(1)},${y(v).toFixed(1)}`).join(' ')} fill="none" stroke={color} strokeWidth="2.5" />
         <circle cx={x(weeks)} cy={y(series[weeks])} r="4.5" fill={color} stroke="#0f172a" strokeWidth="2" />
@@ -111,7 +111,7 @@ export function Simulator({ peptide: p }: { peptide: Peptide }) {
 
   return (
     <div>
-      <a href="#/" className="mb-4 inline-flex items-center gap-1 text-sm text-cyan-300 hover:text-cyan-200">
+      <a href="#/" className="mb-4 inline-flex items-center gap-1 text-sm text-white hover:text-neutral-300">
         <span aria-hidden="true">←</span> All peptides
       </a>
       <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -122,7 +122,7 @@ export function Simulator({ peptide: p }: { peptide: Peptide }) {
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
         {/* 3D view */}
-        <div className="relative h-[380px] overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-slate-800 to-slate-900 sm:h-[520px] lg:sticky lg:top-4 lg:h-[640px]">
+        <div className="relative h-[380px] overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-b from-neutral-800 to-neutral-900 sm:h-[520px] lg:sticky lg:top-4 lg:h-[640px]">
           <Canvas shadows camera={{ position: [0, 1.15, 4.3], fov: 32 }} dpr={[1, 2]}>
             <ambientLight intensity={0.75} />
             <directionalLight position={[3, 5, 4]} intensity={2.4} castShadow />
@@ -136,33 +136,33 @@ export function Simulator({ peptide: p }: { peptide: Peptide }) {
             <OrbitControls target={[0, 1.0, 0]} enablePan={false} enableZoom={false} autoRotate autoRotateSpeed={1.2} minPolarAngle={1.1} maxPolarAngle={1.7} />
           </Canvas>
           <div className="absolute inset-x-3 top-3 flex items-center justify-between gap-2">
-            <span className="rounded-full bg-slate-950/70 px-3 py-1 text-xs text-slate-200">
+            <span className="rounded-full bg-neutral-950/70 px-3 py-1 text-xs text-neutral-200">
               {showStart ? 'Starting body' : `Illustration at week ${weeks}`}
             </span>
             <button
               onClick={() => setShowStart((v) => !v)}
               aria-pressed={showStart}
-              className="rounded-full bg-slate-950/70 px-3 py-1 text-xs font-medium text-cyan-200 ring-1 ring-cyan-300/40 hover:bg-slate-950"
+              className="rounded-full bg-neutral-950/70 px-3 py-1 text-xs font-medium text-white ring-1 ring-white/40 hover:bg-neutral-950"
             >
               {showStart ? 'Show estimate' : 'Show starting body'}
             </button>
           </div>
-          <p className="pointer-events-none absolute inset-x-3 bottom-2 text-center text-[11px] text-slate-400">
+          <p className="pointer-events-none absolute inset-x-3 bottom-2 text-center text-[11px] text-neutral-400">
             Stylized mannequin. Drag to rotate.
           </p>
         </div>
 
         {/* Controls */}
         <div className="space-y-5">
-          <section className="rounded-2xl border border-white/10 bg-slate-900 p-5">
-            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-cyan-300">Starting body</h2>
+          <section className="rounded-2xl border border-white/10 bg-neutral-950 p-5">
+            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-white">Starting body</h2>
             <div className="mb-4 inline-flex rounded-xl bg-white/5 p-1" role="group" aria-label="Gender">
               {(['male', 'female'] as const).map((g) => (
                 <button
                   key={g}
                   onClick={() => setStats(DEFAULTS[g])}
                   aria-pressed={stats.gender === g}
-                  className={`rounded-lg px-4 py-1.5 text-sm capitalize ${stats.gender === g ? 'bg-cyan-300 font-medium text-slate-900' : 'text-slate-300'}`}
+                  className={`rounded-lg px-4 py-1.5 text-sm capitalize ${stats.gender === g ? 'bg-white font-medium text-black' : 'text-neutral-300'}`}
                 >
                   {g}
                 </button>
@@ -173,13 +173,13 @@ export function Simulator({ peptide: p }: { peptide: Peptide }) {
               <Slider label="Weight" {...LIMITS.weightKg} value={stats.weightKg} display={`${stats.weightKg} kg`} onChange={(v) => set('weightKg', v)} />
               <Slider label="Body fat" {...LIMITS.bodyFatPct} value={stats.bodyFatPct} display={`${stats.bodyFatPct}%`} onChange={(v) => set('bodyFatPct', v)} />
             </div>
-            <p className="mt-2 text-xs text-slate-400">
+            <p className="mt-2 text-xs text-neutral-400">
               {fmt(stats.heightCm / 30.48, 1)} ft · {fmt(stats.weightKg * 2.2046, 0)} lb · BMI {fmt(start.bmi)}
             </p>
           </section>
 
-          <section className="rounded-2xl border border-white/10 bg-slate-900 p-5">
-            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-cyan-300">Dose and time</h2>
+          <section className="rounded-2xl border border-white/10 bg-neutral-950 p-5">
+            <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-white">Dose and time</h2>
             <div className="grid gap-4 sm:grid-cols-2">
               <Slider
                 label={`Dose per ${sim.dosePer}`}
@@ -191,18 +191,18 @@ export function Simulator({ peptide: p }: { peptide: Peptide }) {
               />
               <Slider label="Duration" min={0} max={sim.maxWeeks} value={weeks} display={`${weeks} weeks`} onChange={setWeeks} />
             </div>
-            <p className="mt-2 text-xs text-slate-400">
+            <p className="mt-2 text-xs text-neutral-400">
               Sliders only cover the doses and time span used in the product label and main trial. This is not a dosing
               guide; a doctor decides the dose.
             </p>
           </section>
 
-          <section className="rounded-2xl border border-white/10 bg-slate-900 p-5" aria-live="polite">
-            <h2 className="mb-1 text-sm font-semibold uppercase tracking-wider text-cyan-300">Estimated change over time</h2>
-            <p className="mb-3 text-xs text-slate-400">A rough illustration from trial averages. Real results vary a lot from person to person.</p>
+          <section className="rounded-2xl border border-white/10 bg-neutral-950 p-5" aria-live="polite">
+            <h2 className="mb-1 text-sm font-semibold uppercase tracking-wider text-white">Estimated change over time</h2>
+            <p className="mb-3 text-xs text-neutral-400">A rough illustration from trial averages. Real results vary a lot from person to person.</p>
             <table className="mb-4 w-full text-sm">
               <thead>
-                <tr className="text-xs text-slate-500">
+                <tr className="text-xs text-neutral-500">
                   <th className="pb-1 text-left font-normal" />
                   <th className="pb-1 pr-2 text-right font-normal">Start</th>
                   <th className="pb-1 pr-2 text-right font-normal">Week {weeks}</th>
@@ -219,27 +219,27 @@ export function Simulator({ peptide: p }: { peptide: Peptide }) {
             <Curve stats={stats} sim={sim} dose={dose} weeks={weeks} color={p.color} />
 
             {outsideTrial && (
-              <p className="mt-3 rounded-lg bg-amber-300/10 px-3 py-2 text-sm text-amber-100">
+              <p className="mt-3 rounded-lg border border-white/30 px-3 py-2 text-sm text-neutral-200">
                 This starting body has a BMI under 27. The trials did not include people like this, and the medicine is
                 not approved for them, so the estimate here is not meaningful.
               </p>
             )}
-            <div className="mt-4 space-y-2 text-sm text-slate-300">
+            <div className="mt-4 space-y-2 text-sm text-neutral-300">
               <p>
-                <span className="font-medium text-slate-100">Who was studied: </span>
+                <span className="font-medium text-neutral-100">Who was studied: </span>
                 {sim.studiedIn}
               </p>
-              <ul className="list-disc space-y-1 pl-5 text-slate-400">
+              <ul className="list-disc space-y-1 pl-5 text-neutral-400">
                 {sim.notes.map((n) => (
                   <li key={n}>{n}</li>
                 ))}
               </ul>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-neutral-500">
                 Sources:{' '}
                 {p.sources.map((s, i) => (
                   <span key={s.url}>
                     {i > 0 && ' · '}
-                    <a href={s.url} target="_blank" rel="noreferrer" className="underline hover:text-slate-300">
+                    <a href={s.url} target="_blank" rel="noreferrer" className="underline hover:text-neutral-300">
                       {s.label}
                     </a>
                   </span>

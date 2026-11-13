@@ -22,7 +22,7 @@ export function Grid() {
     <>
       <section className="mb-6">
         <h1 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">Peptides, in plain words</h1>
-        <p className="mt-2 max-w-2xl text-slate-300">
+        <p className="mt-2 max-w-2xl text-neutral-300">
           Pick a peptide to see what it is, what it does, and how strong the evidence is. Approved medicines also have
           an illustrative body simulator.
         </p>
@@ -35,7 +35,7 @@ export function Grid() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search peptides"
           aria-label="Search peptides"
-          className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-white placeholder:text-slate-400 focus:border-cyan-300/60 focus:outline-none sm:max-w-xs"
+          className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-white placeholder:text-neutral-400 focus:border-white/60 focus:outline-none sm:max-w-xs"
         />
         <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
           {['All', ...CATEGORIES].map((c) => (
@@ -44,7 +44,7 @@ export function Grid() {
               onClick={() => setCategory(c)}
               aria-pressed={category === c}
               className={`rounded-full px-3.5 py-1.5 text-sm transition ${
-                category === c ? 'bg-cyan-300 font-medium text-slate-900' : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                category === c ? 'bg-white font-medium text-black' : 'bg-white/5 text-neutral-300 hover:bg-white/10'
               }`}
             >
               {c}
@@ -54,7 +54,7 @@ export function Grid() {
       </div>
 
       {shown.length === 0 ? (
-        <p className="rounded-xl border border-white/10 bg-white/5 p-8 text-center text-slate-300">
+        <p className="rounded-xl border border-white/10 bg-white/5 p-8 text-center text-neutral-300">
           No peptides match. Try a different search or filter.
         </p>
       ) : (
@@ -66,7 +66,7 @@ export function Grid() {
                 onClick={() => setOpen(p)}
                 whileHover={{ y: -4 }}
                 transition={{ type: 'spring', stiffness: 320, damping: 30 }}
-                className="flex h-full w-full flex-col rounded-2xl border border-white/10 bg-slate-900 p-5 text-left hover:border-white/25 focus-visible:outline-2 focus-visible:outline-cyan-300"
+                className="flex h-full w-full flex-col rounded-2xl border border-white/10 bg-neutral-950 p-5 text-left hover:border-white/25 focus-visible:outline-2 focus-visible:outline-white"
                 style={{ borderRadius: 16 }}
               >
                 <div className="mb-3 flex items-start justify-between gap-3">
@@ -74,9 +74,9 @@ export function Grid() {
                   <EvidenceTag level={p.evidence} />
                 </div>
                 <h2 className="text-xl font-semibold text-white">{p.name}</h2>
-                {p.alsoKnownAs && <p className="text-sm text-slate-400">{p.alsoKnownAs}</p>}
-                <p className="mt-2 text-slate-300">{p.summary}</p>
-                <p className="mt-auto pt-4 text-xs uppercase tracking-wider text-slate-500">{p.category}</p>
+                {p.alsoKnownAs && <p className="text-sm text-neutral-400">{p.alsoKnownAs}</p>}
+                <p className="mt-2 text-neutral-300">{p.summary}</p>
+                <p className="mt-auto pt-4 text-xs uppercase tracking-wider text-neutral-500">{p.category}</p>
               </motion.button>
             </li>
           ))}

@@ -7,8 +7,8 @@ import { Disclaimer, EvidenceTag } from './ui'
 function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section>
-      <h3 className="mb-1 text-xs font-semibold uppercase tracking-wider text-cyan-300">{title}</h3>
-      <div className="text-slate-200">{children}</div>
+      <h3 className="mb-1 text-xs font-semibold uppercase tracking-wider text-white">{title}</h3>
+      <div className="text-neutral-200">{children}</div>
     </section>
   )
 }
@@ -29,7 +29,7 @@ export function Detail({ peptide: p, onClose }: { peptide: Peptide; onClose: () 
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-6">
       <motion.div
-        className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
+        className="absolute inset-0 bg-neutral-950/80 backdrop-blur-sm"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -41,13 +41,13 @@ export function Detail({ peptide: p, onClose }: { peptide: Peptide; onClose: () 
         aria-modal="true"
         aria-label={p.name}
         transition={{ type: 'spring', stiffness: 260, damping: 30 }}
-        className="relative flex max-h-[92dvh] w-full max-w-5xl flex-col overflow-hidden border border-white/15 bg-slate-900 shadow-2xl md:flex-row"
+        className="relative flex max-h-[92dvh] w-full max-w-5xl flex-col overflow-hidden border border-white/15 bg-neutral-950 shadow-2xl md:flex-row"
         style={{ borderRadius: 20 }}
       >
         <button
           onClick={onClose}
           aria-label="Close"
-          className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-slate-800/90 text-xl text-slate-200 hover:bg-slate-700"
+          className="absolute right-3 top-3 z-10 grid h-9 w-9 place-items-center rounded-full bg-neutral-800/90 text-xl text-neutral-200 hover:bg-neutral-700"
         >
           ×
         </button>
@@ -59,7 +59,7 @@ export function Detail({ peptide: p, onClose }: { peptide: Peptide; onClose: () 
           <motion.div className="absolute inset-0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25 }}>
             <Molecule seed={p.id} residues={p.residues} accent={p.color} />
           </motion.div>
-          <p className="pointer-events-none absolute inset-x-3 bottom-2 text-center text-[11px] leading-tight text-slate-400">
+          <p className="pointer-events-none absolute inset-x-3 bottom-2 text-center text-[11px] leading-tight text-neutral-400">
             Stylized chain of {shownResidues(p.residues)} amino acids{partial ? ` (of ${p.residues})` : ''}. Not the real 3D shape. Drag to
             rotate.
           </p>
@@ -75,8 +75,8 @@ export function Detail({ peptide: p, onClose }: { peptide: Peptide; onClose: () 
           <header className="pr-10">
             <EvidenceTag level={p.evidence} />
             <h2 className="mt-2 text-3xl font-semibold text-white">{p.name}</h2>
-            {p.alsoKnownAs && <p className="text-slate-400">{p.alsoKnownAs}</p>}
-            <p className="mt-2 text-sm text-slate-300">{p.evidenceNote}</p>
+            {p.alsoKnownAs && <p className="text-neutral-400">{p.alsoKnownAs}</p>}
+            <p className="mt-2 text-sm text-neutral-300">{p.evidenceNote}</p>
           </header>
 
           <Section title="What it is">{p.whatItIs}</Section>
@@ -85,7 +85,7 @@ export function Detail({ peptide: p, onClose }: { peptide: Peptide; onClose: () 
           <Section title="Side effects">
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <p className="mb-1 text-sm font-medium text-slate-100">More common</p>
+                <p className="mb-1 text-sm font-medium text-neutral-100">More common</p>
                 <ul className="list-disc space-y-0.5 pl-5 text-sm">
                   {p.sideEffects.common.map((s) => (
                     <li key={s}>{s}</li>
@@ -93,7 +93,7 @@ export function Detail({ peptide: p, onClose }: { peptide: Peptide; onClose: () 
                 </ul>
               </div>
               <div>
-                <p className="mb-1 text-sm font-medium text-slate-100">Rare or serious</p>
+                <p className="mb-1 text-sm font-medium text-neutral-100">Rare or serious</p>
                 <ul className="list-disc space-y-0.5 pl-5 text-sm">
                   {p.sideEffects.rare.map((s) => (
                     <li key={s}>{s}</li>
@@ -107,7 +107,7 @@ export function Detail({ peptide: p, onClose }: { peptide: Peptide; onClose: () 
             <ul className="space-y-0.5 text-sm">
               {p.sources.map((s) => (
                 <li key={s.url}>
-                  <a href={s.url} target="_blank" rel="noreferrer" className="text-cyan-300 underline decoration-cyan-300/40 underline-offset-2 hover:decoration-cyan-300">
+                  <a href={s.url} target="_blank" rel="noreferrer" className="text-white underline decoration-white/40 underline-offset-2 hover:decoration-white">
                     {s.label}
                   </a>
                 </li>
@@ -118,13 +118,13 @@ export function Detail({ peptide: p, onClose }: { peptide: Peptide; onClose: () 
           {p.sim ? (
             <a
               href={`#/sim/${p.id}`}
-              className="inline-flex items-center gap-2 rounded-xl bg-cyan-300 px-5 py-3 font-semibold text-slate-900 hover:bg-cyan-200"
+              className="inline-flex items-center gap-2 rounded-xl bg-white px-5 py-3 font-semibold text-black hover:bg-neutral-200"
             >
               Open body simulator <span aria-hidden="true">→</span>
             </a>
           ) : (
-            <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-slate-300">
-              <p className="font-medium text-slate-100">No body simulator for this one</p>
+            <div className="rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-neutral-300">
+              <p className="font-medium text-neutral-100">No body simulator for this one</p>
               <p className="mt-1">{p.noSimReason}</p>
             </div>
           )}
